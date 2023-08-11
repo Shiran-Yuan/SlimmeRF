@@ -1,7 +1,7 @@
 # SlimmeRF
 **Official implementation for *SlimmeRF: Slimmable Radiance Fields***
 
-(Paper and Appendices will be released on arXiv after double-blind review)
+arXiv Paper Link: xxxx.xxxxx
 
 ## Installing Requirements
 ```
