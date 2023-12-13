@@ -17,7 +17,7 @@ logging.getLogger("imageio_ffmpeg").setLevel(logging.ERROR)
 # Hyper-Parameters
 upsilon = 0.4
 eta = 0
-test_slimmed = [0, 2, 4, 8, 12, 16]
+test_slimmed = [12, 16]
 
 renderer = OctreeRender_trilinear_fast
 train_log=open('train.log','a')
@@ -39,6 +39,8 @@ def export_mesh(args):
     ckpt = torch.load(args.ckpt, map_location=device)
     kwargs = ckpt['kwargs']
     kwargs.update({'device': device})
+    kwargs['init_rank'] = args.init_rank
+    kwargs['rank_inc'] = args.rank_inc
     tensorf = eval(args.model_name)(**kwargs)
     tensorf.load(ckpt)
     alpha,_ = tensorf.getDenseAlpha()
@@ -50,7 +52,7 @@ def render_test(args):
     white_bg = test_dataset.white_bg
     ndc_ray = args.ndc_ray
     if not os.path.exists(args.ckpt):
-        print('the ckpt path does not exists!!')
+        print('the ckpt path does not exist')
         return
     ckpt = torch.load(args.ckpt, map_location=device)
     kwargs = ckpt['kwargs']
@@ -100,7 +102,7 @@ def reconstruction(args):
         ckpt = torch.load(args.ckpt, map_location=device)
         kwargs = ckpt['kwargs']
         kwargs.update({'device':device})
-        tensorf = eval(args.model_name)(**kwargs)
+        tensorf = eval(args.model_name)(init_rank=args.init_rank, rank_inc=args.init_rank, **kwargs)
         tensorf.load(ckpt)
     else:
         tensorf = eval(args.model_name)(aabb, reso_cur, device, init_rank, rank_inc,
@@ -208,7 +210,7 @@ def reconstruction(args):
                 lr_scale = args.lr_decay_target_ratio ** (iteration / args.n_iters)
             grad_vars = tensorf.get_optparam_groups(args.lr_init*lr_scale, args.lr_basis*lr_scale)
             optimizer = torch.optim.Adam(grad_vars, betas=(0.9, 0.99))
-        if tensorf.current_rank[0]<n_lamb_sigma[0] and tensorf.current_rank[1]<n_lamb_sh[0] and abs(loss_rec[-2]-loss_rec[-1])/loss_rec[-1]>upsilon and iteration-last_rank_freeze>rank_freeze:
+        if tensorf.current_rank[0]<n_lamb_sigma[0] and tensorf.current_rank[1]<n_lamb_sh[0] and abs(loss_rec[-2]-loss_rec[-1])/loss_rec[-1]>upsilon and iteration-last_rank_freeze>eta:
             print(iteration,tensorf.current_rank)
             tensorf.update_current_rank(device)
             last_rank_freeze = iteration
