@@ -1,6 +1,8 @@
 # SlimmeRF: Slimmable Radiance Fields
 Shiran Yuan and Hao Zhao
+
 *AIR, Tsinghua University*
+
 ![logo](https://github.com/Shiran-Yuan/SlimmeRF/assets/105504535/1829fd23-32c4-45b0-a815-f6213e978614)
 
 arXiv Paper Link: ***Coming Soon!***
