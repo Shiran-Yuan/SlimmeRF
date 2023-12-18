@@ -5,7 +5,7 @@ Shiran Yuan and Hao Zhao
 
 ![logo](https://github.com/Shiran-Yuan/SlimmeRF/assets/105504535/1829fd23-32c4-45b0-a815-f6213e978614)
 
-arXiv Paper Link: ***Coming Soon!***
+arXiv Paper Link: [2312.10034](https://arxiv.org/abs/2312.10034)
 
 ## Installing Requirements
 ```
@@ -27,7 +27,7 @@ We note that we use a processed version of Tanks & Temples, and the `intrinsics.
 0.0 0.0 1.0 0.0
 0.0 0.0 0.0 1.0
 ```
-(After double-blind review we will host the adjusted .zip file in our own Google Drive and link there instead. )  
+
 After installation, the structure of the `data` directory should be as follows:  
 <details>
   <summary>
