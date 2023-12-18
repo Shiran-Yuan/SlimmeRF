@@ -17,7 +17,7 @@ logging.getLogger("imageio_ffmpeg").setLevel(logging.ERROR)
 # Hyper-Parameters
 upsilon = 0.4
 eta = 0
-test_slimmed = [12, 16]
+test_slimmed = [2, 4, 6, 8, 12, 16]
 
 renderer = OctreeRender_trilinear_fast
 train_log=open('train.log','a')
@@ -45,6 +45,7 @@ def export_mesh(args):
     tensorf.load(ckpt)
     alpha,_ = tensorf.getDenseAlpha()
     convert_sdf_samples_to_ply(alpha.cpu(), f'{args.ckpt[:-3]}.ply',bbox=tensorf.aabb.cpu(), level=0.005)
+    raise Exception('Mesh Exported!')
 @torch.no_grad()
 def render_test(args):
     dataset = dataset_dict[args.dataset_name]
@@ -215,7 +216,7 @@ def reconstruction(args):
             tensorf.update_current_rank(device)
             last_rank_freeze = iteration
             print(iteration,tensorf.current_rank)
-    tensorf.save(f'{logfolder}/{args.expname}.th')
+    tensorf.save(f'{logfolder}/{args.expname}{tensorf.current_rank}.th')
     if args.render_train:
         os.makedirs(f'{logfolder}/imgs_train_all', exist_ok=True)
         train_dataset = dataset(args.datadir, split='train', downsample=args.downsample_train, is_stack=True)
@@ -229,8 +230,9 @@ def reconstruction(args):
         summary_writer.add_scalar('test/psnr_all', np.mean(PSNRs_test), global_step=iteration)
         print(f'======> {args.expname} test all psnr: {np.mean(PSNRs_test)} <========================')
         while tensorf.current_rank[0]>0:
-            tensorf.downdate_current_rank(device)
+            tensorf.downdate_current_rank(device, 1)
             if tensorf.current_rank[0] in test_slimmed:
+                tensorf.save(f'{logfolder}/{args.expname}{tensorf.current_rank}.th')
                 print('='*20)
                 print(tensorf.current_rank)
                 os.makedirs(f'{logfolder}/imgs_test_all', exist_ok=True)
