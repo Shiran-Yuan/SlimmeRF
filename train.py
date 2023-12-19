@@ -58,6 +58,8 @@ def render_test(args):
     ckpt = torch.load(args.ckpt, map_location=device)
     kwargs = ckpt['kwargs']
     kwargs.update({'device': device})
+    kwargs['init_rank'] = args.init_rank
+    kwargs['rank_inc'] = args.rank_inc
     tensorf = eval(args.model_name)(**kwargs)
     tensorf.load(ckpt)
     logfolder = os.path.dirname(args.ckpt)
