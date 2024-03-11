@@ -1,4 +1,4 @@
-# SlimmeRF: Slimmable Radiance Fields
+# SlimmeRF: Slimmable Radiance Fields (3DV'24 Oral)
 Shiran Yuan and Hao Zhao
 
 *AIR, Tsinghua University*
