@@ -1,4 +1,6 @@
-# SlimmeRF: Slimmable Radiance Fields (3DV'24 Best Paper)
+# SlimmeRF: Slimmable Radiance Fields 
+
+# (3DV 2024 Best Paper)
 Shiran Yuan and Hao Zhao
 
 *AIR, Tsinghua University*
